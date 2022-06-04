@@ -26,6 +26,27 @@ class AddSchedule(LoginRequiredMixin, FormView):
     form_class = DateRangeForm
     template_name = 'employees/master_profile/add_schedule.html'
 
+    def get(self, request, *args, **kwargs):
+        """Handle GET requests: instantiate a blank version of the form."""
+        if request.GET:
+            if 'start' in request.GET:
+                start = date.fromisoformat(request.GET['start'])
+                end = date.fromisoformat(request.GET['end'])
+                if start == end:
+                    res = {1: f"{start.strftime('%d.%m')}"}
+                    return JsonResponse(data=json.dumps(res), safe=False)
+                diff = end - start
+                schedule = [i.day for i in Schedule.objects.filter(day__gte=date.today())]
+                res = []
+                for i in range(diff.days + 1):
+                    day = (start + timedelta(days=i))
+                    if day not in schedule:
+                        res.append(day.strftime('%d.%m'))
+                return JsonResponse(data=json.dumps(res), safe=False)
+            else:
+                return JsonResponse(data=json.dumps([]), safe=False)
+        return self.render_to_response(self.get_context_data())
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['master'] = Employees.objects.get(user=self.request.user)
@@ -42,25 +63,3 @@ def ajax_add_schedule(request):
         schedule = Schedule(master=master, day=date(year, int(day_month[1]),  int(day_month[0])))
         schedule.save()
     return redirect('/')
-
-
-
-def ajax_days_schedule(request):
-    if 'start' in request.GET:
-        get_start = request.GET['start']
-        get_end = request.GET['end']
-        if get_start == get_end:
-            res = {1: f"{get_end.split('-')[2]}.{get_start.split('-')[1]}"}
-            return JsonResponse(data=json.dumps(res), safe=False)
-        start = datetime(*[int(i) for i in get_start.split('-')])
-        end = datetime(*[int(i) for i in get_end.split('-')])
-        diff = end - start
-        schedule = [i.day for i in Schedule.objects.filter(day__gte=date.today())]
-        res = []
-        for i in range(diff.days+1):
-            day = (start + timedelta(days=i)).date()
-            if day not in schedule:
-                res.append(day.strftime('%d.%m'))
-        return JsonResponse(data=json.dumps(res), safe=False)
-    else:
-        return JsonResponse(data=json.dumps([]), safe=False)

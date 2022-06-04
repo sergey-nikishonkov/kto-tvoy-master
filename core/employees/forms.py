@@ -23,6 +23,7 @@ class DateRangeForm(forms.Form):
     """Date picker form"""
     today = datetime.now().strftime('%Y-%m-%d')
     start = forms.CharField(
+        initial=today,
         widget=forms.DateInput(attrs={
             'class': 'form-control ml-1',
             'type': 'date',
@@ -30,6 +31,7 @@ class DateRangeForm(forms.Form):
             'min': today,
         })
     )
+
     end = forms.CharField(
         widget=forms.DateInput(attrs={
             'class': 'form-control ml-1',
@@ -39,9 +41,3 @@ class DateRangeForm(forms.Form):
         })
     )
 
-
-class AddScheduleForm(forms.ModelForm):
-    """Add work-days in Schedule model"""
-    class Meta:
-        model = Schedule
-        fields = ('master', 'day')
