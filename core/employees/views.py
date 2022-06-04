@@ -4,10 +4,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.views.generic.edit import FormView
-from .models import Employees, Schedule
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
-from .forms import EmployeeLogingForm, DateRangeForm, AddScheduleForm
+from .models import Employees, Schedule
+from .forms import EmployeeLogingForm, DateRangeForm
 
 
 class EmployeeLogInView(LoginView):
@@ -43,8 +43,6 @@ class AddSchedule(LoginRequiredMixin, FormView):
                     if day not in schedule:
                         res.append(day.strftime('%d.%m'))
                 return JsonResponse(data=json.dumps(res), safe=False)
-            else:
-                return JsonResponse(data=json.dumps([]), safe=False)
         return self.render_to_response(self.get_context_data())
 
     def get_context_data(self, **kwargs):
@@ -54,7 +52,6 @@ class AddSchedule(LoginRequiredMixin, FormView):
 
 
 def ajax_add_schedule(request):
-    form = AddScheduleForm()
     print(request.GET)
     master = Employees.objects.get(user=request.user)
     year = datetime.now().year
