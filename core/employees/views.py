@@ -33,9 +33,8 @@ class AddSchedule(LoginRequiredMixin, FormView):
 
 
 def ajax_add_schedule(request):
+    form = AddScheduleForm()
     print(request.GET)
-    return redirect('/')
-    """  
     master = Employees.objects.get(user=request.user)
     year = datetime.now().year
     for value in request.GET.values():
@@ -43,7 +42,7 @@ def ajax_add_schedule(request):
         schedule = Schedule(master=master, day=date(year, int(day_month[1]),  int(day_month[0])))
         schedule.save()
     return redirect('/')
-    """
+
 
 
 def ajax_days_schedule(request):

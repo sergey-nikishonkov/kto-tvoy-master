@@ -5,7 +5,7 @@
 
 <section class="ftco-section border pt-3 pb-3" id="date_range">
     <h4 class="ml-1">Выберите период</h4>
-    <form id="form1" method="get">
+    <form id="form1" method="post">
         {% csrf_token %}
         {{ form.start }}
         {{ form.end }}
@@ -100,19 +100,18 @@
 
 
                 $("#form2").submit(function(){
-                    let checked = {};
+                    let checked = [];
                     let checkboxes = document.getElementsByClassName('btn-check');
 
                     for (let i = 0; i < checkboxes.length; i++) {
                         if (checkboxes[i].checked) {
-                            checked[i] = checkboxes[i].value
+                            checked.push(checkboxes[i].value);
                         };
                     };
 
-
                     $.ajax({
                         url: '{% url 'add_schedule' %}',
-                        data: checked,
+                        data: {'': checked},
                         dataType: 'json',
                     });
 

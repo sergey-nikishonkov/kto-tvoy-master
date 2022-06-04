@@ -5,6 +5,7 @@ from .models import Schedule
 
 
 class EmployeeLogingForm(AuthenticationForm):
+    """Master login form"""
     username = UsernameField(
         widget=forms.TextInput(attrs={'autofocus': True, 'class': 'form-control'})
     )
@@ -19,6 +20,7 @@ class EmployeeLogingForm(AuthenticationForm):
 
 
 class DateRangeForm(forms.Form):
+    """Date picker form"""
     today = datetime.now().strftime('%Y-%m-%d')
     start = forms.CharField(
         widget=forms.DateInput(attrs={
@@ -39,6 +41,7 @@ class DateRangeForm(forms.Form):
 
 
 class AddScheduleForm(forms.ModelForm):
+    """Add work-days in Schedule model"""
     class Meta:
         model = Schedule
         fields = ('master', 'day')
