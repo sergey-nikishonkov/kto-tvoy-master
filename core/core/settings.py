@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'authentication',
     'online_booking',
     'employees',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -140,4 +141,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'authentication.User'
-#AUTHENTICATION_BACKENDS = ['employees.backends.MyAuthBackend']
+

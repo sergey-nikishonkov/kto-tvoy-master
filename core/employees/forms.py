@@ -1,6 +1,7 @@
 from datetime import datetime
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
+from .models import Schedule
 
 
 class EmployeeLogingForm(AuthenticationForm):
@@ -35,3 +36,9 @@ class DateRangeForm(forms.Form):
             'min': today,
         })
     )
+
+
+class AddScheduleForm(forms.ModelForm):
+    class Meta:
+        model = Schedule
+        fields = ('master', 'day')
