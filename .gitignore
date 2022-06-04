@@ -1,0 +1,7 @@
+venv/
+
+main.py
+
+*.sqlite3
+
+idea/

@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'inc/_nav_for_master_profile.html' %}
+
+
+<section class="ftco-section border pt-3 pb-3" id="date_range">
+    <h4 class="ml-1">Выберите период</h4>
+    <form id="form1" method="get">
+        {% csrf_token %}
+        {{ form.start }}
+        {{ form.end }}
+        <button class="btn btn-primary mt-3 ml-1" type="button" id="btn">Выбрать</button>
+    </form>
+</section>
+
+
+<script>
+    $("#btn").click(function(){
+        let data = {};
+        let start = document.getElementById('start').value;
+        let end = document.getElementById('end').value;
+
+        if (!start) {
+            alert('Выберите начало периода!');
+        } else if (!end) {
+            alert('Выберите конец периода!');
+          } else if (start > end){
+            alert('Конец периода не может быть раньше начала');
+          }else {
+            data['start'] = start;
+            data['end'] = end;
+        };
+
+        $.ajax({
+            url: '{% url 'add_days' %}',
+            data: data,
+            dataType: 'json',
+            success: function(result){
+                let values = JSON.parse(result)
+
+                if (document.getElementById('work_days')){
+                    $('#work_days').remove();
+                };
+
+                let section = document.createElement('section');
+                section.className = 'ftco-section border pt-3 pb-3';
+                section.id = 'work_days';
+                document.body.append(section)
+
+                let title = document.createElement('div');
+                title.id = 'title';
+                title.className = 'row ml-1';
+                title.innerHTML = '<h4>Выберите даты</h4>';
+                section.appendChild(title)
+
+                let form = document.createElement('form');
+                form.id = 'form2';
+                section.appendChild(form);
+
+                let div = document.createElement('div');
+                div.className = 'btn-group mt-1 ml-1';
+                div.setAttribute('aria-label', 'Basic checkbox toggle button group');
+                div.id = 'date_check';
+                div.role = 'group';
+                form.appendChild(div);
+
+                row = document.createElement('div');
+                form.appendChild(row);
+
+                let reset = document.createElement('button');
+                reset.className = 'btn btn-primary mt-3 ml-1';
+                reset.type = 'reset';
+                reset.id = 'reset';
+                reset.innerHTML = 'Сброс';
+                row.appendChild(reset);
+
+                let submit = document.createElement('button');
+                submit.className = 'btn btn-primary mt-3 ml-1 ';
+                submit.type = 'submit';
+                submit.id = 'submit';
+                submit.innerHTML = 'Сохранить';
+                row.appendChild(submit);
+
+
+                for (key in values){
+                    let btn = document.createElement('input');
+                    btn.className = 'btn-check';
+                    btn.type = 'checkbox';
+                    btn.id = key;
+                    btn.value = values[key];
+                    div.appendChild(btn)
+
+                    let label = document.createElement('label');
+                    label.className = 'btn btn-outline-primary';
+                        label.setAttribute('for', key);
+                    label.innerHTML = values[key];
+                    div.appendChild(label)
+                };
+
+
+
+                $("#form2").submit(function(){
+                    let checked = {};
+                    let checkboxes = document.getElementsByClassName('btn-check');
+
+                    for (let i = 0; i < checkboxes.length; i++) {
+                        if (checkboxes[i].checked) {
+                            checked[i] = checkboxes[i].value
+                        };
+                    };
+
+                    $.ajax({
+                        url: '{% url 'add_schedule' %}',
+                        data: checked,
+                        dataType: 'json',
+                    });
+
+                });
+            }
+        });
+    });
+
+
+</script>
+
+
+{% endblock %}

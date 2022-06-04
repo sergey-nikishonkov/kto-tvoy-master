@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load range_filter time_filter %}
+
+{% block content %}
+   {% include 'inc/_nav_for_master_profile.html' %}
+
+    <section class="ftco-section pt-3">
+        <form id="form" method="post">
+        {% csrf_token %}
+            {{ form.date }}
+            <div class="btn-group mt-5 ml-1" role="group" id="group">
+
+            </div>
+            <div class="mt-5">
+                <button class="btn btn-primary mt-3 ml-1" type="submit" id="save">Выбрать</button>
+                <button class="btn btn-primary mt-3 ml-1" type="button" id="delete">Удалить</button>
+            </div>
+        </form>
+    </section>
+
+
+<script>
+    $('select').change(function(){
+        const date = document.getElementById('date').value;
+        $.ajax({
+            url: '{% url 'ajax_get_hours' %}',
+            data: {'date': date},
+            dataType: 'json',
+            success: function(result){
+                const values = JSON.parse(result);
+                const div = document.getElementById('group')
+                const arr = ['10:00', '11:00', '12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00', '21:00']
+
+                $('#group').empty();
+
+                for (let h in arr) {
+                    let input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.className = 'btn-check';
+                    input.id = arr[h];
+                    input.value = arr[h];
+                    input.setAttribute('form', 'form')
+                     for (let key in values){
+                        if (values[key][0] == arr[h] && values[key][1] == false) {
+                            input.checked = true;
+                        } else if (values[key][0] == arr[h] && values[key][1] == true) {
+                            input.checked = true;
+                            input.disabled = true;
+                        };
+                    };
+                    div.appendChild(input);
+
+                    let label = document.createElement('label');
+                    label.className = 'btn btn-outline-primary';
+                    label.setAttribute('for', arr[h])
+                    label.innerHTML =  arr[h];
+                    div.appendChild(label);
+                };
+                let post = {}
+
+
+            },
+        });
+    });
+</script>
+
+{% endblock %}

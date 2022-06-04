@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Запись {% endblock %}
+
+{% block content %}
+<section class="hero-wrap js-fullheight"  style="background-image: url({% static 'images/bg_2.jpg' %});" data-stellar-background-ratio="0.5">
+      <div class="overlay">
+			<div class="overlay"></div>
+    	<div class="container-wrap">
+    		<div class="row no-gutters d-md-flex align-items-center">
+	    		<div class="col-md-9 appointment ftco-animate fadeInUp ftco-animated">
+	    			<h3 class="mb-3">Запись</h3>
+
+	    			<form action="post" class="appointment-form">
+                        {% csrf_token %}
+	    				<div class="d-md-flex">
+		    				<div class="form-group">
+		    					{{ form.name }}
+		    				</div>
+                            <div class="form-group">
+		    					{{ form.phone }}
+		    				</div>
+                        </div>
+
+                        <div class="d-md-flex">
+		    				<div class="form-group">
+		    					<div class="input-wrap">
+                                    <div class="icon"><span class="ion-md-calendar"></span></div>
+
+                                    <input type="text" id="appointment_date" class="form-control" placeholder="{{ form.choice_date.label }}">
+
+	            		        </div>
+		    				</div>
+                        </div>
+
+                        <div class="d-md-flex">
+                            <div class="form-group">
+		    					<div class="input-wrap">
+		            		        <div class="icon"><span class="ion-ios-clock"></span></div>
+									{{ form.choice_time }}
+									{% comment %}
+		            		        <input type="text" id="appointment_time" class="form-control ui-timepicker-input" placeholder="{{ form.choice_time.label }}" autocomplete="off">
+									{% endcomment %}
+	            		        </div>
+		    				</div>
+                        </div>
+
+                        <div class="d-md-flex">
+                            <div class="form-group">
+		    					{{ form.service }}
+		    				</div>
+                        </div>
+
+                        <div class="d-md-flex">
+                            <div class="form-group">
+								{{ form.employee }}
+		    				</div>
+                        </div>
+
+                        <div class="d-md-flex">
+                            <div class="form-group">
+                              <textarea name="" id="" cols="30" rows="3" class="form-control" placeholder="Message"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                          <input type="submit" value="Appointment" class="btn btn-primary py-3 px-4">
+                        </div>
+                    </form>
+
+	    		</div>
+    		</div>
+    	</div>
+    </section>
+{% endblock %}

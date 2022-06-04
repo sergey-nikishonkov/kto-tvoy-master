@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load price_tag %}
+
+
+
+{% block content %}
+{% include 'inc/_navbar.html' %}
+	<div class="hero-wrap js-fullheight" style="background-image: url({% static 'images/bg_2.jpg' %});" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-start" data-scrollax-parent="true">
+          <div class="col-md-6 ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
+
+            <h1 class="mb-5" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">КТО ТВОЙ МАСТЕР</h1>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="ftco-intro">
+    	<div class="container-wrap">
+    		<div class="wrap d-md-flex align-items-end">
+	    		<div class="info">
+	    			<div class="row no-gutters">
+	    				<div class="col-md-5 d-flex ftco-animate">
+	    					<div class="icon"><span class="icon-phone"></span></div>
+	    					<div class="text">
+	    						<h3>+7(952)-209-16-87</h3>
+
+	    					</div>
+	    				</div>
+	    				<div class="col-md-5 d-flex ftco-animate">
+	    					<div class="icon"><span class="icon-my_location"></span></div>
+	    					<div class="text">
+	    						<h3>ул. Фёдора Абрамова, 23 корпус 1</h3>
+	    						<p>Санкт-Петербург, Россия, 194362</p>
+	    					</div>
+	    				</div>
+	    				<div class="col-md-5 d-flex ftco-animate">
+	    					<div class="icon"><span class="icon-clock-o"></span></div>
+	    					<div class="text">
+	    						<h3>ЧАСЫ РАБОТЫ</h3>
+	    						<p>ПН–ВС: 10:00-10:00</p>
+	    					</div>
+	    				</div>
+	    			</div>
+	    		</div>
+	    		<div class="social pl-md-5 p-4">
+	    			<ul class="social-icon">
+						<li class="ftco-animate"><a href="https://www.instagram.com/kto_tvoi_master/?igshid=7at2wzid05tr" target="blank"><span class="icon-instagram"></span></a></li>
+					</ul>
+	    		</div>
+    		</div>
+    	</div>
+    </section>
+
+	<div id="services">
+		<section class="ftco-section ftco-bg-grey">
+			<div class="container">
+				<div class="row justify-content-center mb-5 pb-3">
+				  <div class="col-md-7 heading-section ftco-animate text-center">
+					<h2 class="mb-4">Наши Услуги</h2>
+					<p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
+					<p class="mt-5">Мы создаем простые и стильные мужские прически, делаем нашу работу хорошо и быстро.</p>
+				  </div>
+			</div>
+				<div class="row">
+			  <div class="col-md-3 ftco-animate">
+				<div class="media d-block text-center block-6 services">
+				  <div class="icon d-flex justify-content-center align-items-center mb-4">
+					<span class="flaticon-scissor-and-comb"></span>
+				  </div>
+				  <div class="media-body">
+					<h3 class="heading">Стрижка</h3>
+					<p>Выполним стрижку любой сложности с учетом ваших пожеланий не зависимо от длины и типа волос.</p>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-md-3 ftco-animate">
+				<div class="media d-block text-center block-6 services">
+				  <div class="icon d-flex justify-content-center align-items-center mb-4">
+					<span class="flaticon-male-head-hair-and-beard"></span>
+				  </div>
+				  <div class="media-body">
+					<h3 class="heading">Оформление бороды</h3>
+					<p>В услугу входит создание формы бороды, стрижка усов, окантовка всех линий.</p>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-md-3 ftco-animate">
+				<div class="media d-block text-center block-6 services">
+				  <div class="icon d-flex justify-content-center align-items-center mb-4"><span class="flaticon-heads-hairs-and-scissors"></span></div>
+				  <div class="media-body">
+					<h3 class="heading">Тонировка</h3>
+					<p>Мы используем только профессиональный тоник для камуфляжа седины и создания более насыщенного тона волос бороды.</p>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-md-3 ftco-animate">
+				<div class="media d-block text-center block-6 services">
+				  <div class="icon d-flex justify-content-center align-items-center mb-4"><span class="flaticon-young-male-short-irregular-hair-on-head-and-a-small-beard"></span></div>
+				  <div class="media-body">
+					<h3 class="heading">Укладка</h3>
+					<p>В своей работе применяем профессиональные укладочные средства для мужчин такие как: London Grooming, American Crew, Morgan’s.</p>
+				  </div>
+				</div>
+			  </div>
+			</div>
+			</div>
+		</section>
+
+		{% get_servises %}
+
+		{% comment %}
+		<section class="ftco-section ftco-discount img" style="background-image: url({% static 'images/bg_4.jpg' %});" data-stellar-background-ratio="0.5">
+			<div class="overlay"></div>
+			<div class="container">
+				<div class="row justify-content-center" data-scrollax-parent="true">
+					<div class="col-md-7 text-center discount ftco-animate" data-scrollax=" properties: { translateY: '-30%'}">
+						<h3>Сэкономьте до 30%</h3>
+						<h2 class="mb-4">СКИДКА НА ВСЕ УСЛУГИ</h2>
+						<p class="mb-4">Действует по предварительной записи по номеру телефона: <a href="tel:+79522091687">+7 (952)209-16-87</a>.</p>
+
+					</div>
+				</div>
+			</div>
+		</section>
+		{% endcomment %}
+
+	<section class="ftco-section">
+			<div class="container">
+
+				<div class="row justify-content-center mb-5 pb-3">
+				  <div class="col-md-7 heading-section ftco-animate text-center">
+					<h2 class="mb-4">Наши мастера</h2>
+					<p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
+				  </div>
+				</div>
+
+				<div id="center">
+					<div class="row">
+						{% for master in masters %}
+							{% if master.position == 'Мастер' %}
+								<div class="col-lg-3 d-flex mb-sm-4 ftco-animate">
+									<div class="staff">
+										<div class="img mb-4" style="background-image: url({{ master.photo.url }});"></div>
+										<div class="info text-center">
+											<h3>{{ master.first_name }}</h3>
+											<span class="position">{{ master.position }}</span>
+										</div>
+									</div>
+								</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+
+				<div class="btn-online">
+				  <p><a href="">Записаться</a></p>
+			  </div>
+
+		  </div>
+		</section>
+
+	</div>
+
+	<div id="about">
+		<section class="ftco-section ftco-bg-dark">
+			<div class="container">
+				<div class="row justify-content-center mb-4">
+				  <div class="col-md-7 heading-section ftco-animate text-center">
+					<h2 class="mb-4">О нас</h2>
+					<p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
+				  </div>
+				</div>
+				<div class="row justify-content-center">
+					<div class="col-md-8 text-center ftco-animate">
+						<p>Добрый день! Твой мастер на связи! Мы команда профессионалов и знатоков своего дела с большим опытом. В своей работе используем только профессиональные инструменты и косметику. Наша цель это не только качественное выполнение услуги, но и достижение взаимопонимания между клиентом и мастером. Подбор стрижки и броды с учётом индивидуальных особенностей и предпочтений клиента позволяет нам достигнуть наилучшего результата. Многие наши постоянные клиенты рады встрече со своим мастером и рекомендуют нас своим друзьям и знакомым. А кто твой мастер?</p>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<div id="gallery">
+		<section class="ftco-gallery">
+    	<div class="container">
+    		<div class="row justify-content-center mb-5 pb-3">
+			  <div class="col-md-7 heading-section ftco-animate text-center">
+				<h2 class="mb-4">Галерея</h2>
+				<p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
+				<p class="mt-5">Примеры наших работ.</p>
+			  </div>
+			</div>
+    	</div>
+    	<div class="container-wrap">
+	    	<div class="row no-gutters">
+				<div class="col-md-3 ftco-animate">
+							<a href="{% static 'images/gallery-1.jpg' %}" class="gallery img image-popup d-flex align-items-center" style="background-image: url({% static 'images/gallery-1.jpg' %});">
+								<div class="icon mb-4 d-flex align-items-center justify-content-center">
+									<span class="icon-search"></span>
+								</div>
+							</a>
+						</div>
+				<div class="col-md-3 ftco-animate">
+							<a href="{% static 'images/gallery-2.jpg' %}" class="gallery img image-popup d-flex align-items-center" style="background-image: url({% static 'images/gallery-2.jpg' %});">
+								<div class="icon mb-4 d-flex align-items-center justify-content-center">
+									<span class="icon-search"></span>
+								</div>
+							</a>
+						</div>
+				<div class="col-md-3 ftco-animate">
+							<a href="{% static 'images/gallery-3.jpg' %}" class="gallery img image-popup d-flex align-items-center" style="background-image: url({% static 'images/gallery-3.jpg' %});">
+								<div class="icon mb-4 d-flex align-items-center justify-content-center">
+									<span class="icon-search"></span>
+								</div>
+							</a>
+						</div>
+				<div class="col-md-3 ftco-animate">
+							<a href="{% static 'images/gallery-4.jpg' %}" class="gallery img image-popup d-flex align-items-center" style="background-image: url({% static 'images/gallery-4.jpg' %});">
+								<div class="icon mb-4 d-flex align-items-center justify-content-center">
+									<span class="icon-search"></span>
+								</div>
+							</a>
+						</div>
+				<div class="col-md-3 ftco-animate">
+							<a href="{% static 'images/gallery-5.jpg' %}" class="gallery img image-popup d-flex align-items-center" style="background-image: url({% static 'images/gallery-5.jpg' %});">
+								<div class="icon mb-4 d-flex align-items-center justify-content-center">
+									<span class="icon-search"></span>
+								</div>
+							</a>
+						</div>
+				<div class="col-md-3 ftco-animate">
+							<a href="{% static 'images/gallery-6.jpg' %}" class="gallery img image-popup d-flex align-items-center" style="background-image: url({% static 'images/gallery-6.jpg' %});">
+								<div class="icon mb-4 d-flex align-items-center justify-content-center">
+									<span class="icon-search"></span>
+								</div>
+							</a>
+						</div>
+				<div class="col-md-3 ftco-animate">
+							<a href="{% static 'images/gallery-7.jpg' %}" class="gallery img image-popup d-flex align-items-center" style="background-image: url({% static 'images/gallery-7.jpg' %});">
+								<div class="icon mb-4 d-flex align-items-center justify-content-center">
+									<span class="icon-search"></span>
+								</div>
+							</a>
+						</div>
+				<div class="col-md-3 ftco-animate">
+							<a href="{% static 'images/gallery-8.jpg' %}" class="gallery img image-popup d-flex align-items-center" style="background-image: url({% static 'images/gallery-8.jpg' %});">
+								<div class="icon mb-4 d-flex align-items-center justify-content-center">
+									<span class="icon-search"></span>
+								</div>
+							</a>
+						</div>
+			</div>
+	    </div>
+    </section>
+		<section class="ftco-counter ftco-bg-dark img" id="section-counter" style="background-image: url({% static 'images/bg_1.jpg' %});" data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+
+    </section>
+	</div>
+
+	<div id="about2">
+		<section class="ftco-section">
+			<div class="container">
+				<div class="row justify-content-center mb-4">
+					<div class="col-md-12 heading-section ftco-animate text-center">
+						<div><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1989.9857650743622!2d30.34367821610283!3d60.08160658192838!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4697cb28ce063bd1%3A0xb2add275d9c68df8!2z0YPQuy4g0KTRkdC00L7RgNCwINCQ0LHRgNCw0LzQvtCy0LAsIDIzINC60L7RgNC_0YPRgSAxLCDQodCw0L3QutGCLdCf0LXRgtC10YDQsdGD0YDQsywg0KDQvtGB0YHQuNGPLCAxOTQzNjI!5e0!3m2!1sru!2sua!4v1579439336020!5m2!1sru!2sua"  width="100%" height="400px%" frameborder="0" style="border:0;" allowfullscreen=""></iframe></div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+
+
+	{% comment %}
+	<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+	{% endcomment %}
+
+{% endblock %}
+
+{% include 'inc/_contact_footer.html' %}
