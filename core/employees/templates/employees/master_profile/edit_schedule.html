@@ -20,16 +20,17 @@
 
 
 <script>
-    $('select').change(function(){
+        $('select').change(function(){
         const date = document.getElementById('date').value;
+
         $.ajax({
-            url: '{% url 'ajax_get_hours' %}',
+            url: '{% url 'edit_schedule' %}',
             data: {'date': date},
             dataType: 'json',
             success: function(result){
                 const values = JSON.parse(result);
                 const div = document.getElementById('group')
-                const arr = ['10:00', '11:00', '12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00', '21:00']
+                const arr = ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30','16:00', '16:30','17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00']
 
                 $('#group').empty();
 
@@ -39,7 +40,6 @@
                     input.className = 'btn-check';
                     input.id = arr[h];
                     input.value = arr[h];
-                    input.setAttribute('form', 'form')
                      for (let key in values){
                         if (values[key][0] == arr[h] && values[key][1] == false) {
                             input.checked = true;

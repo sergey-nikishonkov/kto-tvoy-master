@@ -7,7 +7,7 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from .models import Employees, Schedule
-from .forms import EmployeeLogingForm, AddScheduleForm
+from .forms import EmployeeLogingForm, AddScheduleForm, EditScheduleForm
 
 
 class EmployeeLogInView(LoginView):
@@ -38,11 +38,11 @@ class AddSchedule(LoginRequiredMixin, FormView):
         if request.GET:
             start = date.fromisoformat(request.GET['start'])
             end = date.fromisoformat(request.GET['end'])
-            if start == end:
+            schedule = [i.day for i in Schedule.objects.filter(day__gte=date.today())]
+            if start == end and start not in schedule:
                 res = {1: f"{start.strftime('%d.%m')}"}
                 return JsonResponse(data=json.dumps(res), safe=False)
             diff = end - start
-            schedule = [i.day for i in Schedule.objects.filter(day__gte=date.today())]
             res = []
             for i in range(diff.days + 1):
                 day = (start + timedelta(days=i))
@@ -77,3 +77,25 @@ class AddSchedule(LoginRequiredMixin, FormView):
         context = super().get_context_data(**kwargs)
         context['master'] = Employees.objects.get(user=self.request.user)
         return context
+
+
+class EditSchedule(LoginRequiredMixin, FormView):
+    form_class = EditScheduleForm
+    model = Schedule
+    context_object_name = 'schedule'
+    template_name = 'employees/master_profile/edit_schedule.html'
+    raise_exception = True
+
+    def get(self, request, *args, **kwargs):
+        if request.GET:
+            chosen_date = Schedule.objects.get(day=request.GET['date'])
+            checked_hours = Hours.objects.filter(schedule=chosen_date)
+            hours = [(i.hour.strftime('%H:%M'), i.booked) for i in checked_hours]
+            return JsonResponse(data=json.dumps(hours), safe=False)
+        return self.render_to_response(self.get_context_data())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['master'] = Employees.objects.get(user=self.request.user)
+        return context
+

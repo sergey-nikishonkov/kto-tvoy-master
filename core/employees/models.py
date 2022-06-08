@@ -39,6 +39,7 @@ class Hours(models.Model):
     schedule = models.ForeignKey(Schedule, on_delete=models.PROTECT, verbose_name='Рабочий день')
     hour = models.TimeField(verbose_name='Час')
     booked = models.BooleanField(default=False, verbose_name='Зарезервирован')
+    appointment_id = models.IntegerField(unique=True, verbose_name='ID записи')
 
     def __str__(self):
         return f'{self.hour} часов'
