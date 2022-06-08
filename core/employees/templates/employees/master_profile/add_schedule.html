@@ -5,7 +5,7 @@
 
 <section class="ftco-section border pt-3 pb-3" id="date_range">
     <h4 class="ml-1">Выберите период</h4>
-    <form id="form1" method="post">
+    <form id="form" method="post">
         {% csrf_token %}
         {{ form.start }}
         {{ form.end }}
@@ -32,30 +32,36 @@
         };
 
         $.ajax({
-            url: '{% url 'add_days' %}',
+            url: '{% url 'schedule' %}',
             data: data,
             dataType: 'json',
             success: function(result){
                 let values = JSON.parse(result)
 
-                if (document.getElementById('work_days')){
-                    $('#work_days').remove();
+                if (document.getElementById('title')){
+                    $('#title').remove();
+                };
+
+                if (document.getElementById('date_check')){
+                    $('#date_check').remove();
+                };
+
+                 if (document.getElementById('buttons')){
+                    $('#buttons').remove();
                 };
 
                 let section = document.createElement('section');
-                section.className = 'ftco-section border pt-3 pb-3';
+                section.className = 'ftco-section pt-3 pb-3';
                 section.id = 'work_days';
                 document.body.append(section)
+
+                let form = document.getElementById('form');
 
                 let title = document.createElement('div');
                 title.id = 'title';
                 title.className = 'row ml-1';
                 title.innerHTML = '<h4>Выберите даты</h4>';
-                section.appendChild(title)
-
-                let form = document.createElement('form');
-                form.id = 'form2';
-                section.appendChild(form);
+                form.appendChild(title);
 
                 let div = document.createElement('div');
                 div.className = 'btn-group mt-1 ml-1';
@@ -65,6 +71,7 @@
                 form.appendChild(div);
 
                 row = document.createElement('div');
+                row.id = 'buttons';
                 form.appendChild(row);
 
                 let reset = document.createElement('button');
@@ -75,7 +82,7 @@
                 row.appendChild(reset);
 
                 let submit = document.createElement('button');
-                submit.className = 'btn btn-primary mt-3 ml-1 ';
+                submit.className = 'btn btn-primary mt-3 ml-1';
                 submit.type = 'submit';
                 submit.id = 'submit';
                 submit.innerHTML = 'Сохранить';
@@ -87,6 +94,7 @@
                     btn.className = 'btn-check';
                     btn.type = 'checkbox';
                     btn.id = key;
+                    btn.name = 'days';
                     btn.value = values[key];
                     div.appendChild(btn)
 
@@ -96,31 +104,9 @@
                     label.innerHTML = values[key];
                     div.appendChild(label)
                 };
-
-
-
-                $("#form2").submit(function(){
-                    let checked = [];
-                    let checkboxes = document.getElementsByClassName('btn-check');
-
-                    for (let i = 0; i < checkboxes.length; i++) {
-                        if (checkboxes[i].checked) {
-                            checked.push(checkboxes[i].value);
-                        };
-                    };
-
-                    $.ajax({
-                        url: '{% url 'add_schedule' %}',
-                        data: {'': checked},
-                        dataType: 'json',
-                    });
-
-                });
             }
         });
     });
-
-
 </script>
 
 

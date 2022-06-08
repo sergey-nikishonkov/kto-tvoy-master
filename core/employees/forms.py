@@ -15,11 +15,12 @@ class EmployeeLogingForm(AuthenticationForm):
         strip=False,
         widget=forms.PasswordInput(
             attrs={'autocomplete': 'current-password', 'class': 'form-control'}
+
         ),
     )
 
 
-class DateRangeForm(forms.Form):
+class AddScheduleForm(forms.Form):
     """Date picker form"""
     today = datetime.now().strftime('%Y-%m-%d')
     start = forms.CharField(
@@ -41,3 +42,11 @@ class DateRangeForm(forms.Form):
         })
     )
 
+    days = forms.MultipleChoiceField()
+
+
+class AddScheduleForm(forms.ModelForm):
+    """Add work-days in Schedule model"""
+    class Meta:
+        model = Schedule
+        fields = ('master', 'day')

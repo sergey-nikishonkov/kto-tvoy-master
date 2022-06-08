@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -7,7 +7,7 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from .models import Employees, Schedule
-from .forms import EmployeeLogingForm, DateRangeForm
+from .forms import EmployeeLogingForm, AddScheduleForm
 
 
 class EmployeeLogInView(LoginView):
@@ -23,40 +23,57 @@ class EmployeeLogOutView(LogoutView):
 
 
 class AddSchedule(LoginRequiredMixin, FormView):
-    form_class = DateRangeForm
+    """This class provides range of dates and saves date in database"""
+
+    form_class = AddScheduleForm
     template_name = 'employees/master_profile/add_schedule.html'
+    raise_exception = True
+    choices = []
 
     def get(self, request, *args, **kwargs):
-        """Handle GET requests: instantiate a blank version of the form."""
+        """
+        Handle GET requests: instantiate a blank version of the form.
+        Return days from date-range
+        """
         if request.GET:
-            if 'start' in request.GET:
-                start = date.fromisoformat(request.GET['start'])
-                end = date.fromisoformat(request.GET['end'])
-                if start == end:
-                    res = {1: f"{start.strftime('%d.%m')}"}
-                    return JsonResponse(data=json.dumps(res), safe=False)
-                diff = end - start
-                schedule = [i.day for i in Schedule.objects.filter(day__gte=date.today())]
-                res = []
-                for i in range(diff.days + 1):
-                    day = (start + timedelta(days=i))
-                    if day not in schedule:
-                        res.append(day.strftime('%d.%m'))
+            start = date.fromisoformat(request.GET['start'])
+            end = date.fromisoformat(request.GET['end'])
+            if start == end:
+                res = {1: f"{start.strftime('%d.%m')}"}
                 return JsonResponse(data=json.dumps(res), safe=False)
+            diff = end - start
+            schedule = [i.day for i in Schedule.objects.filter(day__gte=date.today())]
+            res = []
+            for i in range(diff.days + 1):
+                day = (start + timedelta(days=i))
+                if day not in schedule:
+                    day = day.strftime('%d.%m')
+                    res.append(day)
+                    self.choices.append((day, day))
+            return JsonResponse(data=json.dumps(res), safe=False)
         return self.render_to_response(self.get_context_data())
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        Add days to master`s schedule
+        """
+        form = self.get_form()
+        form.fields['days'].choices = self.choices
+        if form.is_valid():
+            master = Employees.objects.get(user=request.user)
+            values = form.cleaned_data['days']
+            year = date.today().year
+            for value in values:
+                day_month = value.split('.')
+                day = date(year, int(day_month[1]), int(day_month[0]))
+                schedule = Schedule(master=master, day=day)
+                schedule.save()
+            return(redirect('/'))
+        return self.form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['master'] = Employees.objects.get(user=self.request.user)
         return context
-
-
-def ajax_add_schedule(request):
-    print(request.GET)
-    master = Employees.objects.get(user=request.user)
-    year = datetime.now().year
-    for value in request.GET.values():
-        day_month = value.split('.')
-        schedule = Schedule(master=master, day=date(year, int(day_month[1]),  int(day_month[0])))
-        schedule.save()
-    return redirect('/')
