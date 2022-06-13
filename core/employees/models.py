@@ -21,7 +21,7 @@ class Employees(models.Model):
 class Schedule(models.Model):
     """Model describes master`s schedule: add work-days ad days-off"""
     master = models.ForeignKey(Employees, on_delete=models.PROTECT, verbose_name='Мастер')
-    day = models.DateField(verbose_name='Рабочий день')
+    day = models.DateField(unique=True, verbose_name='Рабочий день')
     start = models.TimeField(default=time(10, 0), verbose_name='Начало дня')
     end = models.TimeField(default=time(22, 0), verbose_name='Конец дня')
     is_reserved_hours = models.CharField(max_length=255, default='', verbose_name='Занятые часы')
@@ -36,10 +36,10 @@ class Schedule(models.Model):
 
 
 class Hours(models.Model):
-    schedule = models.ForeignKey(Schedule, on_delete=models.PROTECT, verbose_name='Рабочий день')
+    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, verbose_name='Рабочий день')
     hour = models.TimeField(verbose_name='Час')
     booked = models.BooleanField(default=False, verbose_name='Зарезервирован')
-    appointment_id = models.IntegerField(unique=True, verbose_name='ID записи')
+    appointment_id = models.IntegerField(unique=True, verbose_name='ID записи', blank=True, null=True)
 
     def __str__(self):
         return f'{self.hour} часов'
@@ -47,3 +47,4 @@ class Hours(models.Model):
     class Meta:
         verbose_name = 'Рабочий час'
         verbose_name_plural = 'Рабочие часы'
+        unique_together = ('schedule', 'hour')

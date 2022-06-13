@@ -13,7 +13,7 @@
             </div>
             <div class="mt-5">
                 <button class="btn btn-primary mt-3 ml-1" type="submit" id="save">Выбрать</button>
-                <button class="btn btn-primary mt-3 ml-1" type="button" id="delete">Удалить</button>
+                <a class="btn btn-primary mt-3 ml-1" type="button" id="delete">Удалить</a>
             </div>
         </form>
     </section>
@@ -38,6 +38,7 @@
                     let input = document.createElement('input');
                     input.type = 'checkbox';
                     input.className = 'btn-check';
+                    input.name = 'hours';
                     input.id = arr[h];
                     input.value = arr[h];
                      for (let key in values){
@@ -56,9 +57,6 @@
                     label.innerHTML =  arr[h];
                     div.appendChild(label);
                 };
-                let post = {}
-
-
             },
         });
     });
