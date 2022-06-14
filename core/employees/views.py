@@ -1,17 +1,19 @@
 import json
-from datetime import date, timedelta, time
+from datetime import date, timedelta
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views.generic.edit import FormView, DeleteView
+from django.views.generic.list import ListView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
-from django.db.models import Q
 from .models import Employees, Schedule, Hours
 from .forms import EmployeeLogingForm, AddScheduleForm, EditScheduleForm
+from .schedule_tools import edit_work_hours, add_work_days
 
 
 class EmployeeLogInView(LoginView):
+    """LogIN for employees"""
     template_name = 'employees/master_profile/loging.html'
     form_class = EmployeeLogingForm
 
@@ -20,6 +22,7 @@ class EmployeeLogInView(LoginView):
 
 
 class EmployeeLogOutView(LogoutView):
+    """LogOut for employees"""
     next_page = reverse_lazy('home')
 
 
@@ -33,10 +36,7 @@ class AddSchedule(LoginRequiredMixin, FormView):
     _choices = []
 
     def get(self, request, *args, **kwargs):
-        """
-        Handle GET requests: instantiate a blank version of the form.
-        Return days from date-range
-        """
+        """Return days from date-range"""
         if request.GET:
             start = date.fromisoformat(request.GET['start'])
             end = date.fromisoformat(request.GET['end'])
@@ -56,20 +56,11 @@ class AddSchedule(LoginRequiredMixin, FormView):
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
-        """
-        Handle POST requests: instantiate a form instance with the passed
-        POST variables and then check if it's valid.
-        Add days to master`s schedule
-        """
+        """Add days to master`s schedule"""
         form = self.get_form()
         form.fields['days'].choices = self._choices
         if form.is_valid():
-            values = form.cleaned_data['days']
-            year = date.today().year
-            for value in values:
-                day_month = value.split('.')
-                day = date(year, int(day_month[1]), int(day_month[0]))
-                Schedule.objects.create(master=request.user.employees, day=day)
+            add_work_days(form.cleaned_data['days'], request.user.employees)
             return self.form_valid(form)
         return self.form_invalid(form)
 
@@ -80,6 +71,7 @@ class AddSchedule(LoginRequiredMixin, FormView):
 
 
 class EditSchedule(LoginRequiredMixin, FormView):
+    """Allows to add and delete work hours"""
     form_class = EditScheduleForm
     model = Schedule
     template_name = 'employees/master_profile/edit_schedule.html'
@@ -97,16 +89,10 @@ class EditSchedule(LoginRequiredMixin, FormView):
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
+        """Add or delete work hours"""
         form = self.get_form()
         if form.is_valid():
-            available_hours = ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00',
-                 '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30',
-                 '21:00']
-            schedule = Schedule.objects.get(day=form.cleaned_data['date'])
-            res = set(available_hours) - set(form.cleaned_data['hours'])
-            Hours.objects.filter(schedule__day=form.cleaned_data['date'], hour__in=res).delete()
-            for hour in form.cleaned_data['hours']:
-                Hours.objects.get_or_create(schedule=schedule, hour=hour)
+            edit_work_hours(form.cleaned_data['date'], form.cleaned_data['hours'])
             return self.form_valid(form)
         return self.form_invalid(form)
 
@@ -115,5 +101,11 @@ class EditSchedule(LoginRequiredMixin, FormView):
         context['master'] = Employees.objects.get(user=self.request.user)
         return context
 
-class DeleteDay(DeleteView):
+
+class ScheduleList(LoginRequiredMixin, ListView):
     pass
+
+
+class DeleteDay(DeleteView):
+    model = Schedule
+    success_url = reverse_lazy('edit_schedule')

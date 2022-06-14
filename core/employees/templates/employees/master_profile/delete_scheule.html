@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    {% include 'inc/_nav_for_master_profile.html' %}
+
+    <section class="ftco-section pt-3">
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Мастер</th>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Время</th>
+                    <th scope="col">Телефон</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Услуги</th>
+                    <th scope="col">Редактирование</th>
+                </tr>
+            </thead>
+              <tbody>
+                {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.employee }}</td>
+                        <td>{{ appointment.choice_date }}</td>
+                        <td>{{ appointment.choice_time}}</td>
+                        <td>{{ appointment.phone }}</td>
+                        <td>{{ appointment.name }}</td>
+                        <td>
+                            {% for i in appointment.service.all %}
+                            <p>{{ i.title }}</p>
+                            {% endfor %}
+                        </td>
+
+                        <td><a href="{% url 'edit_appointment' appointment.pk %}">Редактироать</a></td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+        </table>
+
+    </section>
+
+
+
+{% endblock %}

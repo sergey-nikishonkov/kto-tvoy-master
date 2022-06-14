@@ -6,4 +6,6 @@ urlpatterns = [
     path('logout/', EmployeeLogOutView.as_view(), name='logout'),
     path('schedule/', AddSchedule.as_view(), name='schedule'),
     path('schedule/edit/', EditSchedule.as_view(), name='edit_schedule'),
+    path('schedule/list/', EditSchedule.as_view(), name='date_list'),
+    path('schedule/delete/<int:pk>', EditSchedule.as_view(), name='delete_day'),
 ]
