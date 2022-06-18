@@ -103,7 +103,35 @@ class EditSchedule(LoginRequiredMixin, FormView):
 
 
 class ScheduleList(LoginRequiredMixin, ListView):
-    pass
+    model = Schedule
+    template_name = 'employees/master_profile/schedule_list.html'
+    context_object_name = 'schedules'
+
+    def get_queryset(self, request=None):
+        queryset = super().get_queryset()
+        if request:
+            start = date.fromisoformat(request.GET['start'])\
+                if request.GET['start'] else date.today()
+            end = date.fromisoformat(request.GET['end']) \
+                if request.GET['end'] else date.today()
+            queryset = queryset.filter(day__range=(start, end)).prefetch_related('hours_set')
+            return queryset
+        queryset = queryset.filter(day__range=(date.today(), date.today())).prefetch_related('hours_set')
+        return queryset.none()
+
+    def get(self, request, *args, **kwargs):
+        if request.GET:
+            self.object_list = self.get_queryset(request)
+        else:
+            self.object_list = self.get_queryset()
+        context = self.get_context_data()
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['master'] = Employees.objects.get(user=self.request.user)
+        print(context)
+        return context
 
 
 class DeleteDay(DeleteView):

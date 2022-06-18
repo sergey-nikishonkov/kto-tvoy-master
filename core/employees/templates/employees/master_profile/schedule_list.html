@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    {% include 'inc/_nav_for_master_profile.html' %}
+
+    <div class="input-group input-daterange">
+        <legend><h4>Выберите даты</h4></legend>
+        <div class="input-group-addon ml-3">Начало периода: </div>
+        <input type="date" class="form-control" name="start" id="start">
+        <div class="input-group-addon ml-5">Конец периода: </div>
+        <input type="date" class="form-control" name="end" id="end">
+        <button class="btn btn-primary ml-3" type="button" id="btn">Выбрать</button>
+    </div>
+
+    <section class="ftco-section pt-3">
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Рабочие часы</th>
+                    <th scope="col">Удалить</th>
+                </tr>
+            </thead>
+              <tbody>
+                {% for schedule in object_list %}
+                    <tr>
+                        <td>{{ schedule.day }}</td>
+                        <td>
+                            {% for hour in schedule.hours_set.all %}
+                                {{ hour.hour }}
+                            {% endfor %}
+                        </td>
+                        <td><a href="">Удалить</a></td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+        </table>
+
+    </section>
+
+<script>
+    $('#btn').click(function(){
+        start = document.getElementById('start').value;
+        end = document.getElementById('end').value;
+
+        $.ajax({
+            url: '{% url 'date_list' %}',
+            data: {'start': start, 'end': end},
+            dataType: 'json',
+        });
+    });
+</script>
+{% endblock %}
+
